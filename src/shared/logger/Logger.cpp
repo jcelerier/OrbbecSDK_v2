@@ -90,7 +90,7 @@ std::shared_ptr<Logger> Logger::getInstance() {
     return instance;
 }
 
-Logger::Logger() : spdlogRegistry_(spdlog::details::registry::instance_ptr()) {
+Logger::Logger() : spdlogRegistry_(&spdlog::details::registry::instance()) {
     spdlog::set_pattern(OB_DEFAULT_LOG_FMT);
 
     std::lock_guard<std::mutex> lock(logIntvlRecordMapMtx);
@@ -129,7 +129,7 @@ Logger::~Logger() noexcept {
         callbackSink_.reset();
     }
 
-    spdlogRegistry_.reset();
+    // spdlogRegistry_.reset();
 }
 
 void Logger::createFileSink() {

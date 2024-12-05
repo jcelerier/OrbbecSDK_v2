@@ -45,6 +45,7 @@ extern std::mutex                                               logIntvlRecordMa
 template <typename... Args>
 void log_intvl_invoke(std::shared_ptr<ObLogIntvlRecord> record, uint64_t minIntvlMsec, spdlog::source_loc src_loc, spdlog::level::level_enum level,
                       std::string fmt, Args &&...args) {
+    return;
     std::unique_lock<std::mutex> lock(record->mtx);
     record->cv.wait_for(lock, std::chrono::milliseconds(record->interval));
     if(record->count > 0) {
@@ -59,7 +60,7 @@ void log_intvl_invoke(std::shared_ptr<ObLogIntvlRecord> record, uint64_t minIntv
         auto usStr = fmt::format("{:06d}", us);
 
         fmt = fmt + " [**" + std::to_string(record->count) + " logs in " + std::to_string(duration) + "ms, last: " + timestampStr + "." + usStr.data() + "**]";
-        spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
+        // spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
 
         uint64_t avgInterval = duration / record->count;
         if(avgInterval < record->interval) {  // Reduce log output frequency
@@ -82,8 +83,9 @@ void log_intvl_invoke(std::shared_ptr<ObLogIntvlRecord> record, uint64_t minIntv
 template <typename... Args>
 void log_intvl(std::shared_ptr<ObLogIntvlRecord> record, uint64_t minIntvlMsec, spdlog::source_loc src_loc, spdlog::level::level_enum level, std::string fmt,
                Args &&...args) {
+    return;
     if(minIntvlMsec == 0) {
-        spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
+        // spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
     }
     else {
         std::unique_lock<std::mutex> lock(record->mtx);
@@ -110,7 +112,7 @@ void log_intvl(std::shared_ptr<ObLogIntvlRecord> record, uint64_t minIntvlMsec, 
                 }
             }
 
-            spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
+            // spdlog::default_logger_raw()->log(src_loc, level, fmt, std::forward<Args>(args)...);
             record->count          = 0;
             record->lastInvokeTime = nowTime;
             lock.unlock();

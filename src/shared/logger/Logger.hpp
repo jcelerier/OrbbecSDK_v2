@@ -3,11 +3,7 @@
 
 #pragma once
 
-#ifdef _DEBUG
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-#else
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
-#endif
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_OFF
 
 #ifdef _WIN32
 #ifndef SPDLOG_WCHAR_TO_UTF8_SUPPORT
@@ -77,6 +73,6 @@ private:
     spdlog::sink_ptr fileSink_;
     spdlog::sink_ptr callbackSink_;
 
-    std::shared_ptr<spdlog::details::registry> spdlogRegistry_;  // handle spdlog registry instance to control it's life cycle
+    spdlog::details::registry *spdlogRegistry_{};  // handle spdlog registry instance to control it's life cycle
 };
 }  // namespace libobsensor
