@@ -11,7 +11,7 @@ file(GLOB_RECURSE SOURCE_FILES "*.cpp" EXCLUDE unittest)
 file(GLOB_RECURSE HEADERS_FILES "*.hpp" EXCLUDE unittest)
 target_sources(shared PRIVATE ${SOURCE_FILES} ${HEADERS_FILES})
 
-add_subdirectory(${OB_3RDPARTY_DIR}/spdlog spdlog)
+# add_subdirectory(${OB_3RDPARTY_DIR}/spdlog spdlog)
 target_link_libraries(shared PUBLIC spdlog::spdlog)
 target_include_directories(shared PUBLIC ${OB_PUBLIC_HEADERS_DIR} ${CMAKE_CURRENT_LIST_DIR})
 
